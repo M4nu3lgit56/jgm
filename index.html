@@ -3,48 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora Profesional de Gorras</title>
+<title>Calculadora de Gorras Pro</title>
 
 <style>
-body {
+body{
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg,#0f172a,#1e293b);
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
     color:#e2e8f0;
 }
 
-.container {
-    max-width:1100px;
+.container{
+    max-width:1200px;
     margin:auto;
     padding:20px;
 }
 
-h1 {
+h1{
     text-align:center;
-    margin-bottom:20px;
 }
 
-.card {
+.card{
     background:#1e293b;
     padding:20px;
     border-radius:12px;
     margin-bottom:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.4);
-    animation:fadeIn .5s ease;
+    box-shadow:0 8px 20px rgba(0,0,0,.4);
+    animation:fade .4s ease;
 }
 
-@keyframes fadeIn {
-    from{opacity:0; transform:translateY(10px);}
+@keyframes fade{
+    from{opacity:0;transform:translateY(10px);}
     to{opacity:1;}
 }
 
-.row {
+.row{
     display:flex;
     gap:10px;
     flex-wrap:wrap;
 }
 
-input, select {
+input{
     padding:10px;
     border-radius:8px;
     border:none;
@@ -53,45 +52,30 @@ input, select {
     width:100%;
 }
 
-button {
-    padding:10px 15px;
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;
+}
+
+button{
+    padding:10px;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    background:#2563eb;
-    color:white;
     transition:.3s;
 }
 
-button:hover {
-    transform:scale(1.05);
-    background:#1d4ed8;
-}
+.add{background:#22c55e;color:white;width:100%;}
+.calc{background:#f59e0b;color:white;width:100%;margin-top:15px;}
 
-.add-btn {
-    background:#22c55e;
-    width:100%;
-    margin-top:10px;
-}
+button:hover{transform:scale(1.05);}
 
-.calcular {
-    width:100%;
-    margin-top:20px;
-    background:#f59e0b;
-}
-
-.result {
+.result{
     background:#020617;
     padding:15px;
     border-radius:10px;
     margin-top:10px;
-    animation:fadeIn .5s ease;
-}
-
-.grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-    gap:10px;
 }
 </style>
 </head>
@@ -99,133 +83,150 @@ button:hover {
 <body>
 
 <div class="container">
+
 <h1>Calculadora Profesional de Gorras</h1>
 
 <div id="gorras"></div>
-
-<button class="add-btn" onclick="agregarGorra()">+ Agregar otro color</button>
+<button class="add" onclick="agregar()">+ Agregar otro color</button>
 
 <div class="card">
-<h3>Precios</h3>
+<h3>Precios por material</h3>
 <div class="grid">
-<input type="number" id="tela" value="934">
-<input type="number" id="lino" value="450">
-<input type="number" id="pimpon" value="412.5">
-<input type="number" id="visera" value="480">
-<input type="number" id="correa" value="180">
-<input type="number" id="boton" value="65">
-<input type="number" id="marquilla" value="160">
-<input type="number" id="bandera" value="70">
-<input type="number" id="etiqueta" value="70">
-<input type="number" id="sesgoE" value="270">
-<input type="number" id="sesgoT" value="31">
-<input type="number" id="tira" value="168">
+
+<input id="tela" value="934" placeholder="Tela (por gorra)">
+<input id="lino" value="450" placeholder="Lino Flex">
+<input id="pimpon" value="412.5" placeholder="Pimpón">
+<input id="visera" value="480" placeholder="Visera">
+<input id="correa" value="180" placeholder="Correa">
+<input id="boton" value="65" placeholder="Botón">
+<input id="marquilla" value="160" placeholder="Marquilla">
+<input id="bandera" value="70" placeholder="Bandera">
+<input id="etiqueta" value="70" placeholder="Etiqueta">
+<input id="sesgoE" value="270" placeholder="Sesgo estampado (mt)">
+<input id="sesgoT" value="31" placeholder="Sesgo trasero">
+<input id="tira" value="168" placeholder="Tira">
+
 </div>
 </div>
 
-<button class="calcular" onclick="calcular()">Calcular</button>
+<button class="calc" onclick="calcular()">Calcular</button>
 
-<div id="resultados"></div>
+<div id="resultado"></div>
 
 </div>
 
 <script>
 
-let contador = 0;
+let c=0;
 
-function agregarGorra(){
-    contador++;
-
-    let div = document.createElement('div');
-    div.className = "card";
-    div.innerHTML = `
+function agregar(){
+    c++;
+    let div=document.createElement('div');
+    div.className='card';
+    div.innerHTML=`
         <div class="row">
-            <input type="text" placeholder="Color" id="color${contador}">
-            <input type="number" placeholder="Cantidad" id="cantidad${contador}">
+            <input id="color${c}" placeholder="Color">
+            <input id="cant${c}" type="number" placeholder="Cantidad">
         </div>
     `;
     document.getElementById('gorras').appendChild(div);
 }
 
-agregarGorra();
+agregar();
 
 function calcular(){
 
-    let precios = {
-        tela: +tela.value,
-        lino: +lino.value,
-        pimpon: +pimpon.value,
-        visera: +visera.value,
-        correa: +correa.value,
-        boton: +boton.value,
-        marquilla: +marquilla.value,
-        bandera: +bandera.value,
-        etiqueta: +etiqueta.value,
-        sesgoE: +sesgoE.value,
-        sesgoT: +sesgoT.value,
-        tira: +tira.value
-    };
+let totalInv=0;
+let totalGan=0;
+let html="";
 
-    let resultadosHTML = "";
-    let totalGlobal = 0;
-    let inversionGlobal = 0;
+let precios={
+tela:+tela.value,
+lino:+lino.value,
+pimpon:+pimpon.value,
+visera:+visera.value,
+correa:+correa.value,
+boton:+boton.value,
+marquilla:+marquilla.value,
+bandera:+bandera.value,
+etiqueta:+etiqueta.value,
+sesgoE:+sesgoE.value,
+sesgoT:+sesgoT.value,
+tira:+tira.value
+};
 
-    for(let i=1;i<=contador;i++){
+for(let i=1;i<=c;i++){
 
-        let cantidad = document.getElementById(`cantidad${i}`).value;
-        let color = document.getElementById(`color${i}`).value;
+let cant=+document.getElementById(`cant${i}`).value;
+let color=document.getElementById(`color${i}`).value;
 
-        if(!cantidad) continue;
+if(!cant) continue;
 
-        cantidad = +cantidad;
+/* CALCULOS CORREGIDOS */
 
-        // materiales
-        let telaCm = 100 * cantidad;
-        let linoCm = 1.8 * cantidad;
-        let pimponCm = 1.8 * cantidad;
-        let sesgoMetro = 1 * cantidad;
-        let sesgoTraseroCm = 25 * cantidad;
-        let tiraCm = 60 * cantidad;
+// conversiones reales
+let telaMt = cant / 10;
+let linoMt = cant / 55;
+let pimponMt = cant / 55;
+let viseras = cant;
+let correas = cant;
+let botones = cant;
+let marquillas = cant;
+let banderas = cant;
+let etiquetas = cant;
+let sesgoEMt = cant;
+let sesgoTMt = cant / 4;
+let tiraMt = (cant * 60) / 100;
 
-        let costoUnitario = Object.values(precios).reduce((a,b)=>a+b,0);
-        let inversion = costoUnitario * cantidad;
-        let precioVenta = costoUnitario * 1.5;
-        let ganancia = (precioVenta - costoUnitario) * cantidad;
+// costos
+let costoUnitario = Object.values(precios).reduce((a,b)=>a+b,0);
+let inversion = costoUnitario * cant;
+let precioVenta = costoUnitario + 500;
+let ganancia = (precioVenta - costoUnitario) * cant;
 
-        totalGlobal += ganancia;
-        inversionGlobal += inversion;
+totalInv += inversion;
+totalGan += ganancia;
 
-        resultadosHTML += `
-        <div class="result">
-        <h3>Color: ${color}</h3>
+html+=`
+<div class="result">
 
-        <p><b>Materiales:</b></p>
-        <ul>
-            <li>Tela: ${telaCm} cm (${(telaCm/100).toFixed(2)} mt)</li>
-            <li>Lino Flex: ${linoCm.toFixed(2)} cm</li>
-            <li>Pimpón: ${pimponCm.toFixed(2)} cm</li>
-            <li>Sesgo estampado: ${sesgoMetro} mt</li>
-            <li>Sesgo trasero: ${sesgoTraseroCm} cm</li>
-            <li>Tira: ${tiraCm} cm</li>
-        </ul>
+<h3>Color: ${color}</h3>
 
-        <p>Costo unitario: $${costoUnitario.toFixed(2)}</p>
-        <p>Inversión: $${inversion.toFixed(2)}</p>
-        <p>Precio venta: $${precioVenta.toFixed(2)}</p>
-        <p>Ganancia: $${ganancia.toFixed(2)}</p>
-        </div>
-        `;
-    }
+<p><b>Materiales:</b></p>
+<ul>
+<li>Tela: ${telaMt.toFixed(2)} mt</li>
+<li>Lino Flex: ${linoMt.toFixed(2)} mt</li>
+<li>Pimpón: ${pimponMt.toFixed(2)} mt</li>
+<li>Viseras: ${viseras} und</li>
+<li>Correas: ${correas} und</li>
+<li>Botones: ${botones} und</li>
+<li>Marquillas: ${marquillas} und</li>
+<li>Banderas: ${banderas} und</li>
+<li>Etiquetas: ${etiquetas} und</li>
+<li>Sesgo estampado: ${sesgoEMt} mt</li>
+<li>Sesgo trasero: ${sesgoTMt.toFixed(2)} mt</li>
+<li>Tira: ${tiraMt.toFixed(2)} mt</li>
+</ul>
 
-    resultadosHTML += `
-    <div class="result">
-        <h2>Resultado Global</h2>
-        <p>Inversión total: $${inversionGlobal.toFixed(2)}</p>
-        <p>Ganancia total: $${totalGlobal.toFixed(2)}</p>
-    </div>
-    `;
+<p>Inversión: $${inversion.toFixed(0)}</p>
+<p>Precio unitario: $${costoUnitario.toFixed(0)}</p>
+<p>Precio de venta: $${precioVenta.toFixed(0)}</p>
+<p>Ganancia: $${ganancia.toFixed(0)}</p>
 
-    document.getElementById('resultados').innerHTML = resultadosHTML;
+</div>
+`;
+}
+
+html+=`
+<div class="result">
+<h2>Resultado Final</h2>
+<p>Inversión total: $${totalInv.toFixed(0)}</p>
+<p>Ganancia total: $${totalGan.toFixed(0)}</p>
+</div>
+`;
+
+document.getElementById('resultado').innerHTML=html;
+
 }
 
 </script>
