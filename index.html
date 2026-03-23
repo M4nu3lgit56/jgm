@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Gorras</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        border: none;
+        margin-top: 5px;
+        background: #334155;
+        color: white;
+    }
+
+    .stepper {
+        display: flex;
+        align-items: center;
+    }
+
+    .stepper button {
+        width: 35px;
+        height: 35px;
+        border: none;
+        background: #2563eb;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .stepper input {
+        text-align: center;
+    }
+
+    button.calcular {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #22c55e;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .resultados {
+        margin-top: 20px;
+        background: #020617;
+        padding: 15px;
+        border-radius: 8px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora de Gorras</h1>
+
+    <label>Cantidad de gorras</label>
+    <input type="number" id="cantidad" value="1">
+
+    <h3>Precios por unidad (editable)</h3>
+
+    <label>Tela</label>
+    <div class="stepper">
+        <button onclick="cambiar('tela', -1)">-</button>
+        <input type="number" id="tela" value="934">
+        <button onclick="cambiar('tela', 1)">+</button>
+    </div>
+
+    <label>Lino Flex</label>
+    <div class="stepper">
+        <button onclick="cambiar('lino', -1)">-</button>
+        <input type="number" id="lino" value="450">
+        <button onclick="cambiar('lino', 1)">+</button>
+    </div>
+
+    <label>Pimpón</label>
+    <div class="stepper">
+        <button onclick="cambiar('pimpon', -1)">-</button>
+        <input type="number" id="pimpon" value="412.5">
+        <button onclick="cambiar('pimpon', 1)">+</button>
+    </div>
+
+    <label>Visera</label>
+    <div class="stepper">
+        <button onclick="cambiar('visera', -1)">-</button>
+        <input type="number" id="visera" value="480">
+        <button onclick="cambiar('visera', 1)">+</button>
+    </div>
+
+    <label>Correa</label>
+    <div class="stepper">
+        <button onclick="cambiar('correa', -1)">-</button>
+        <input type="number" id="correa" value="180">
+        <button onclick="cambiar('correa', 1)">+</button>
+    </div>
+
+    <label>Botón</label>
+    <div class="stepper">
+        <button onclick="cambiar('boton', -1)">-</button>
+        <input type="number" id="boton" value="65">
+        <button onclick="cambiar('boton', 1)">+</button>
+    </div>
+
+    <label>Marquilla</label>
+    <div class="stepper">
+        <button onclick="cambiar('marquilla', -1)">-</button>
+        <input type="number" id="marquilla" value="160">
+        <button onclick="cambiar('marquilla', 1)">+</button>
+    </div>
+
+    <label>Bandera</label>
+    <div class="stepper">
+        <button onclick="cambiar('bandera', -1)">-</button>
+        <input type="number" id="bandera" value="70">
+        <button onclick="cambiar('bandera', 1)">+</button>
+    </div>
+
+    <label>Etiqueta</label>
+    <div class="stepper">
+        <button onclick="cambiar('etiqueta', -1)">-</button>
+        <input type="number" id="etiqueta" value="70">
+        <button onclick="cambiar('etiqueta', 1)">+</button>
+    </div>
+
+    <label>Sesgo estampado</label>
+    <div class="stepper">
+        <button onclick="cambiar('sesgoE', -1)">-</button>
+        <input type="number" id="sesgoE" value="270">
+        <button onclick="cambiar('sesgoE', 1)">+</button>
+    </div>
+
+    <label>Sesgo trasero</label>
+    <div class="stepper">
+        <button onclick="cambiar('sesgoT', -1)">-</button>
+        <input type="number" id="sesgoT" value="31">
+        <button onclick="cambiar('sesgoT', 1)">+</button>
+    </div>
+
+    <label>Tira</label>
+    <div class="stepper">
+        <button onclick="cambiar('tira', -1)">-</button>
+        <input type="number" id="tira" value="168">
+        <button onclick="cambiar('tira', 1)">+</button>
+    </div>
+
+    <button class="calcular" onclick="calcular()">Calcular</button>
+
+    <div class="resultados" id="resultados"></div>
+</div>
+
+<script>
+function cambiar(id, valor) {
+    let input = document.getElementById(id);
+    input.value = parseFloat(input.value) + valor;
+}
+
+function calcular() {
+    let cantidad = parseFloat(document.getElementById('cantidad').value);
+
+    let tela = document.getElementById('tela').value;
+    let lino = document.getElementById('lino').value;
+    let pimpon = document.getElementById('pimpon').value;
+    let visera = document.getElementById('visera').value;
+    let correa = document.getElementById('correa').value;
+    let boton = document.getElementById('boton').value;
+    let marquilla = document.getElementById('marquilla').value;
+    let bandera = document.getElementById('bandera').value;
+    let etiqueta = document.getElementById('etiqueta').value;
+    let sesgoE = document.getElementById('sesgoE').value;
+    let sesgoT = document.getElementById('sesgoT').value;
+    let tira = document.getElementById('tira').value;
+
+    let costoUnitario = 
+        parseFloat(tela) +
+        parseFloat(lino) +
+        parseFloat(pimpon) +
+        parseFloat(visera) +
+        parseFloat(correa) +
+        parseFloat(boton) +
+        parseFloat(marquilla) +
+        parseFloat(bandera) +
+        parseFloat(etiqueta) +
+        parseFloat(sesgoE) +
+        parseFloat(sesgoT) +
+        parseFloat(tira);
+
+    let inversion = costoUnitario * cantidad;
+
+    let precioVenta = costoUnitario * 1.5; 
+    let ganancia = (precioVenta - costoUnitario) * cantidad;
+
+    document.getElementById('resultados').innerHTML = `
+        <p><b>Materiales necesarios:</b> ${cantidad} unidades de cada insumo</p>
+        <p><b>Costo por gorra:</b> $${costoUnitario.toFixed(2)}</p>
+        <p><b>Inversión total:</b> $${inversion.toFixed(2)}</p>
+        <p><b>Precio sugerido por gorra:</b> $${precioVenta.toFixed(2)}</p>
+        <p><b>Ganancia total:</b> $${ganancia.toFixed(2)}</p>
+    `;
+}
+</script>
+
+</body>
+</html>
