@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora de Gorras Pro</title>
 
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <style>
 body{
     margin:0;
@@ -19,9 +21,7 @@ body{
     padding:20px;
 }
 
-h1{
-    text-align:center;
-}
+h1{text-align:center;}
 
 .card{
     background:#1e293b;
@@ -29,12 +29,6 @@ h1{
     border-radius:12px;
     margin-bottom:15px;
     box-shadow:0 8px 20px rgba(0,0,0,.4);
-    animation:fade .4s ease;
-}
-
-@keyframes fade{
-    from{opacity:0;transform:translateY(10px);}
-    to{opacity:1;}
 }
 
 .row{
@@ -50,24 +44,24 @@ input{
     background:#334155;
     color:white;
     width:100%;
+    font-size:16px;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:10px;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:12px;
 }
 
 .material-item{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
+    background:#020617;
+    padding:10px;
+    border-radius:10px;
 }
 
 .material-item label{
     font-size:0.9em;
     font-weight:600;
-    color:#cbd5e1;
 }
 
 button{
@@ -78,8 +72,23 @@ button{
     transition:.3s;
 }
 
-.add{background:#22c55e;color:white;width:100%;}
+.add{
+    background:#22c55e;
+    color:white;
+    width:100%;
+    margin:20px 0;
+}
+
 .calc{background:#f59e0b;color:white;width:100%;margin-top:15px;}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.copy{background:#3b82f6;color:white;width:100%;}
+.img{background:#a855f7;color:white;width:100%;}
 
 button:hover{transform:scale(1.05);}
 
@@ -105,59 +114,28 @@ button:hover{transform:scale(1.05);}
 <h3>Precios por material</h3>
 <div class="grid">
 
-<div class="material-item">
-    <label>Tela (por gorra)</label>
-    <input id="tela" value="934" type="number">
-</div>
-<div class="material-item">
-    <label>Lino Flex</label>
-    <input id="lino" value="450" type="number">
-</div>
-<div class="material-item">
-    <label>Pimpón</label>
-    <input id="pimpon" value="412.5" type="number">
-</div>
-<div class="material-item">
-    <label>Visera</label>
-    <input id="visera" value="480" type="number">
-</div>
-<div class="material-item">
-    <label>Correa</label>
-    <input id="correa" value="180" type="number">
-</div>
-<div class="material-item">
-    <label>Botón</label>
-    <input id="boton" value="65" type="number">
-</div>
-<div class="material-item">
-    <label>Marquilla</label>
-    <input id="marquilla" value="160" type="number">
-</div>
-<div class="material-item">
-    <label>Bandera</label>
-    <input id="bandera" value="70" type="number">
-</div>
-<div class="material-item">
-    <label>Etiqueta</label>
-    <input id="etiqueta" value="70" type="number">
-</div>
-<div class="material-item">
-    <label>Sesgo estampado (mt)</label>
-    <input id="sesgoE" value="270" type="number">
-</div>
-<div class="material-item">
-    <label>Sesgo trasero</label>
-    <input id="sesgoT" value="31" type="number">
-</div>
-<div class="material-item">
-    <label>Tira</label>
-    <input id="tira" value="168" type="number">
-</div>
+<input id="tela" value="934" type="number" placeholder="Tela">
+<input id="lino" value="450" type="number" placeholder="Lino">
+<input id="pimpon" value="412.5" type="number" placeholder="Pimpón">
+<input id="visera" value="480" type="number" placeholder="Visera">
+<input id="correa" value="180" type="number" placeholder="Correa">
+<input id="boton" value="65" type="number" placeholder="Botón">
+<input id="marquilla" value="160" type="number" placeholder="Marquilla">
+<input id="bandera" value="70" type="number" placeholder="Bandera">
+<input id="etiqueta" value="70" type="number" placeholder="Etiqueta">
+<input id="sesgoE" value="270" type="number" placeholder="Sesgo E">
+<input id="sesgoT" value="31" type="number" placeholder="Sesgo T">
+<input id="tira" value="168" type="number" placeholder="Tira">
 
 </div>
 </div>
 
 <button class="calc" onclick="calcular()">Calcular</button>
+
+<div class="actions">
+<button class="copy" onclick="copiar()">Copiar texto</button>
+<button class="img" onclick="descargar()">Descargar imagen</button>
+</div>
 
 <div id="resultado"></div>
 
@@ -182,11 +160,25 @@ function agregar(){
 
 agregar();
 
+function formato(num){
+    return num.toLocaleString('es-CO');
+}
+
+function medida(valor){
+    if(valor < 1){
+        return (valor * 100).toFixed(0) + " cm";
+    }
+    return valor.toFixed(2) + " mt";
+}
+
+let textoGlobal="";
+
 function calcular(){
 
 let totalInv=0;
 let totalGan=0;
 let html="";
+textoGlobal="";
 
 let precios={
 tela:+tela.value,
@@ -210,23 +202,13 @@ let color=document.getElementById(`color${i}`).value;
 
 if(!cant) continue;
 
-/* CALCULOS CORREGIDOS */
-
-// conversiones reales
 let telaMt = cant / 10;
 let linoMt = cant / 55;
 let pimponMt = cant / 55;
-let viseras = cant;
-let correas = cant;
-let botones = cant;
-let marquillas = cant;
-let banderas = cant;
-let etiquetas = cant;
 let sesgoEMt = cant;
 let sesgoTMt = cant / 4;
 let tiraMt = (cant * 60) / 100;
 
-// costos
 let costoUnitario = Object.values(precios).reduce((a,b)=>a+b,0);
 let inversion = costoUnitario * cant;
 let precioVenta = costoUnitario + 500;
@@ -237,44 +219,59 @@ totalGan += ganancia;
 
 html+=`
 <div class="result">
-
-<h3>Color: ${color}</h3>
-
-<p><b>Materiales:</b></p>
-<ul>
-<li>Tela: ${telaMt.toFixed(2)} mt</li>
-<li>Lino Flex: ${linoMt.toFixed(2)} mt</li>
-<li>Pimpón: ${pimponMt.toFixed(2)} mt</li>
-<li>Viseras: ${viseras} und</li>
-<li>Correas: ${correas} und</li>
-<li>Botones: ${botones} und</li>
-<li>Marquillas: ${marquillas} und</li>
-<li>Banderas: ${banderas} und</li>
-<li>Etiquetas: ${etiquetas} und</li>
-<li>Sesgo estampado: ${sesgoEMt} mt</li>
-<li>Sesgo trasero: ${sesgoTMt.toFixed(2)} mt</li>
-<li>Tira: ${tiraMt.toFixed(2)} mt</li>
-</ul>
-
-<p>Inversión: $${inversion.toFixed(0)}</p>
-<p>Precio unitario: $${costoUnitario.toFixed(0)}</p>
-<p>Precio de venta: $${precioVenta.toFixed(0)}</p>
-<p>Ganancia: $${ganancia.toFixed(0)}</p>
-
+<h3>${color}</h3>
+<p>Tela: ${medida(telaMt)}</p>
+<p>Lino: ${medida(linoMt)}</p>
+<p>Pimpón: ${medida(pimponMt)}</p>
+<p>Sesgo E: ${medida(sesgoEMt)}</p>
+<p>Sesgo T: ${medida(sesgoTMt)}</p>
+<p>Tira: ${medida(tiraMt)}</p>
+<p>Inversión: $${formato(inversion)}</p>
+<p>Venta: $${formato(precioVenta)}</p>
+<p>Ganancia: $${formato(ganancia)}</p>
 </div>
+`;
+
+textoGlobal += `
+Color: ${color}
+Cantidad: ${cant}
+Inversión: $${formato(inversion)}
+Venta: $${formato(precioVenta)}
+Ganancia: $${formato(ganancia)}
+
 `;
 }
 
 html+=`
 <div class="result">
-<h2>Resultado Final</h2>
-<p>Inversión total: $${totalInv.toFixed(0)}</p>
-<p>Ganancia total: $${totalGan.toFixed(0)}</p>
+<h2>Total</h2>
+<p>Inversión: $${formato(totalInv)}</p>
+<p>Ganancia: $${formato(totalGan)}</p>
 </div>
+`;
+
+textoGlobal += `
+TOTAL
+Inversión: $${formato(totalInv)}
+Ganancia: $${formato(totalGan)}
 `;
 
 document.getElementById('resultado').innerHTML=html;
 
+}
+
+function copiar(){
+    navigator.clipboard.writeText(textoGlobal);
+    alert("Copiado al portapapeles");
+}
+
+function descargar(){
+    html2canvas(document.getElementById('resultado')).then(canvas=>{
+        let link=document.createElement('a');
+        link.download="resultado.png";
+        link.href=canvas.toDataURL();
+        link.click();
+    });
 }
 
 </script>
