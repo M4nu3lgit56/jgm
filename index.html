@@ -62,6 +62,7 @@ input{
 .material-item label{
     font-size:0.9em;
     font-weight:600;
+    color:#cbd5e1;
 }
 
 button{
@@ -114,28 +115,23 @@ button:hover{transform:scale(1.05);}
 <h3>Precios por material</h3>
 <div class="grid">
 
-<input id="tela" value="934" type="number" placeholder="Tela">
-<input id="lino" value="450" type="number" placeholder="Lino">
-<input id="pimpon" value="412.5" type="number" placeholder="Pimpón">
-<input id="visera" value="480" type="number" placeholder="Visera">
-<input id="correa" value="180" type="number" placeholder="Correa">
-<input id="boton" value="65" type="number" placeholder="Botón">
-<input id="marquilla" value="160" type="number" placeholder="Marquilla">
-<input id="bandera" value="70" type="number" placeholder="Bandera">
-<input id="etiqueta" value="70" type="number" placeholder="Etiqueta">
-<input id="sesgoE" value="270" type="number" placeholder="Sesgo E">
-<input id="sesgoT" value="31" type="number" placeholder="Sesgo T">
-<input id="tira" value="168" type="number" placeholder="Tira">
+<div class="material-item"><label>Tela (por gorra)</label><input id="tela" value="934" type="number"></div>
+<div class="material-item"><label>Lino Flex</label><input id="lino" value="450" type="number"></div>
+<div class="material-item"><label>Pimpón</label><input id="pimpon" value="412.5" type="number"></div>
+<div class="material-item"><label>Visera</label><input id="visera" value="480" type="number"></div>
+<div class="material-item"><label>Correa</label><input id="correa" value="180" type="number"></div>
+<div class="material-item"><label>Botón</label><input id="boton" value="65" type="number"></div>
+<div class="material-item"><label>Marquilla</label><input id="marquilla" value="160" type="number"></div>
+<div class="material-item"><label>Bandera</label><input id="bandera" value="70" type="number"></div>
+<div class="material-item"><label>Etiqueta</label><input id="etiqueta" value="70" type="number"></div>
+<div class="material-item"><label>Sesgo estampado (mt)</label><input id="sesgoE" value="270" type="number"></div>
+<div class="material-item"><label>Sesgo trasero</label><input id="sesgoT" value="31" type="number"></div>
+<div class="material-item"><label>Tira</label><input id="tira" value="168" type="number"></div>
 
 </div>
 </div>
 
 <button class="calc" onclick="calcular()">Calcular</button>
-
-<div class="actions">
-<button class="copy" onclick="copiar()">Copiar texto</button>
-<button class="img" onclick="descargar()">Descargar imagen</button>
-</div>
 
 <div id="resultado"></div>
 
@@ -144,6 +140,7 @@ button:hover{transform:scale(1.05);}
 <script>
 
 let c=0;
+let textos={};
 
 function agregar(){
     c++;
@@ -171,14 +168,12 @@ function medida(valor){
     return valor.toFixed(2) + " mt";
 }
 
-let textoGlobal="";
-
 function calcular(){
 
 let totalInv=0;
 let totalGan=0;
 let html="";
-textoGlobal="";
+textos={};
 
 let precios={
 tela:+tela.value,
@@ -202,13 +197,21 @@ let color=document.getElementById(`color${i}`).value;
 
 if(!cant) continue;
 
+// conversiones
 let telaMt = cant / 10;
 let linoMt = cant / 55;
 let pimponMt = cant / 55;
+let viseras = cant;
+let correas = cant;
+let botones = cant;
+let marquillas = cant;
+let banderas = cant;
+let etiquetas = cant;
 let sesgoEMt = cant;
 let sesgoTMt = cant / 4;
 let tiraMt = (cant * 60) / 100;
 
+// costos
 let costoUnitario = Object.values(precios).reduce((a,b)=>a+b,0);
 let inversion = costoUnitario * cant;
 let precioVenta = costoUnitario + 500;
@@ -217,28 +220,49 @@ let ganancia = (precioVenta - costoUnitario) * cant;
 totalInv += inversion;
 totalGan += ganancia;
 
-html+=`
-<div class="result">
-<h3>${color}</h3>
-<p>Tela: ${medida(telaMt)}</p>
-<p>Lino: ${medida(linoMt)}</p>
-<p>Pimpón: ${medida(pimponMt)}</p>
-<p>Sesgo E: ${medida(sesgoEMt)}</p>
-<p>Sesgo T: ${medida(sesgoTMt)}</p>
-<p>Tira: ${medida(tiraMt)}</p>
-<p>Inversión: $${formato(inversion)}</p>
-<p>Venta: $${formato(precioVenta)}</p>
-<p>Ganancia: $${formato(ganancia)}</p>
-</div>
-`;
-
-textoGlobal += `
+// guardar texto individual
+textos[i] = `
 Color: ${color}
 Cantidad: ${cant}
-Inversión: $${formato(inversion)}
-Venta: $${formato(precioVenta)}
-Ganancia: $${formato(ganancia)}
 
+Inversión: $${formato(inversion)}
+Precio unitario: $${formato(costoUnitario)}
+Precio venta: $${formato(precioVenta)}
+Ganancia: $${formato(ganancia)}
+`;
+
+html+=`
+<div class="result" id="bloque${i}">
+
+<h3>Color: ${color}</h3>
+
+<p><b>Materiales:</b></p>
+<ul>
+<li>Tela: ${medida(telaMt)}</li>
+<li>Lino Flex: ${medida(linoMt)}</li>
+<li>Pimpón: ${medida(pimponMt)}</li>
+<li>Viseras: ${viseras} und</li>
+<li>Correas: ${correas} und</li>
+<li>Botones: ${botones} und</li>
+<li>Marquillas: ${marquillas} und</li>
+<li>Banderas: ${banderas} und</li>
+<li>Etiquetas: ${etiquetas} und</li>
+<li>Sesgo estampado: ${medida(sesgoEMt)}</li>
+<li>Sesgo trasero: ${medida(sesgoTMt)}</li>
+<li>Tira: ${medida(tiraMt)}</li>
+</ul>
+
+<p>Inversión: $${formato(inversion)}</p>
+<p>Precio unitario: $${formato(costoUnitario)}</p>
+<p>Precio de venta: $${formato(precioVenta)}</p>
+<p>Ganancia: $${formato(ganancia)}</p>
+
+<div class="actions">
+<button class="copy" onclick="copiarBloque(${i})">Copiar</button>
+<button class="img" onclick="descargarBloque(${i})">Imagen</button>
+</div>
+
+</div>
 `;
 }
 
@@ -250,25 +274,19 @@ html+=`
 </div>
 `;
 
-textoGlobal += `
-TOTAL
-Inversión: $${formato(totalInv)}
-Ganancia: $${formato(totalGan)}
-`;
-
 document.getElementById('resultado').innerHTML=html;
 
 }
 
-function copiar(){
-    navigator.clipboard.writeText(textoGlobal);
-    alert("Copiado al portapapeles");
+function copiarBloque(i){
+    navigator.clipboard.writeText(textos[i]);
+    alert("Copiado");
 }
 
-function descargar(){
-    html2canvas(document.getElementById('resultado')).then(canvas=>{
+function descargarBloque(i){
+    html2canvas(document.getElementById(`bloque${i}`)).then(canvas=>{
         let link=document.createElement('a');
-        link.download="resultado.png";
+        link.download=`color_${i}.png`;
         link.href=canvas.toDataURL();
         link.click();
     });
