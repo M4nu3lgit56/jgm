@@ -1,12 +1,283 @@
-<script>
-function formatCurrency(amount) {
-    return '$' + parseFloat(amount).toFixed(2);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Gorras Pro</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:#e2e8f0;
 }
 
-function convertMetersToCentimeters(meters) {
-    if (meters < 1) {
-        return meters * 100;
-    }
-    return meters;
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
 }
+
+h1{
+    text-align:center;
+}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.4);
+    animation:fade .4s ease;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;}
+}
+
+.row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+input{
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:#334155;
+    color:white;
+    width:100%;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;
+}
+
+.material-item{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.material-item label{
+    font-size:0.9em;
+    font-weight:600;
+    color:#cbd5e1;
+}
+
+button{
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.add{background:#22c55e;color:white;width:100%;}
+.calc{background:#f59e0b;color:white;width:100%;margin-top:15px;}
+
+button:hover{transform:scale(1.05);}
+
+.result{
+    background:#020617;
+    padding:15px;
+    border-radius:10px;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Calculadora Profesional de Gorras</h1>
+
+<div id="gorras"></div>
+<button class="add" onclick="agregar()">+ Agregar otro color</button>
+
+<div class="card">
+<h3>Precios por material</h3>
+<div class="grid">
+
+<div class="material-item">
+    <label>Tela (por gorra)</label>
+    <input id="tela" value="934" type="number">
+</div>
+<div class="material-item">
+    <label>Lino Flex</label>
+    <input id="lino" value="450" type="number">
+</div>
+<div class="material-item">
+    <label>Pimpón</label>
+    <input id="pimpon" value="412.5" type="number">
+</div>
+<div class="material-item">
+    <label>Visera</label>
+    <input id="visera" value="480" type="number">
+</div>
+<div class="material-item">
+    <label>Correa</label>
+    <input id="correa" value="180" type="number">
+</div>
+<div class="material-item">
+    <label>Botón</label>
+    <input id="boton" value="65" type="number">
+</div>
+<div class="material-item">
+    <label>Marquilla</label>
+    <input id="marquilla" value="160" type="number">
+</div>
+<div class="material-item">
+    <label>Bandera</label>
+    <input id="bandera" value="70" type="number">
+</div>
+<div class="material-item">
+    <label>Etiqueta</label>
+    <input id="etiqueta" value="70" type="number">
+</div>
+<div class="material-item">
+    <label>Sesgo estampado (mt)</label>
+    <input id="sesgoE" value="270" type="number">
+</div>
+<div class="material-item">
+    <label>Sesgo trasero</label>
+    <input id="sesgoT" value="31" type="number">
+</div>
+<div class="material-item">
+    <label>Tira</label>
+    <input id="tira" value="168" type="number">
+</div>
+
+</div>
+</div>
+
+<button class="calc" onclick="calcular()">Calcular</button>
+
+<div id="resultado"></div>
+
+</div>
+
+<script>
+
+let c=0;
+
+function agregar(){
+    c++;
+    let div=document.createElement('div');
+    div.className='card';
+    div.innerHTML=`
+        <div class="row">
+            <input id="color${c}" placeholder="Color">
+            <input id="cant${c}" type="number" placeholder="Cantidad">
+        </div>
+    `;
+    document.getElementById('gorras').appendChild(div);
+}
+
+agregar();
+
+function calcular(){
+
+let totalInv=0;
+let totalGan=0;
+let html="";
+
+let precios={
+tela:+tela.value,
+lino:+lino.value,
+pimpon:+pimpon.value,
+visera:+visera.value,
+correa:+correa.value,
+boton:+boton.value,
+marquilla:+marquilla.value,
+bandera:+bandera.value,
+etiqueta:+etiqueta.value,
+sesgoE:+sesgoE.value,
+sesgoT:+sesgoT.value,
+tira:+tira.value
+};
+
+for(let i=1;i<=c;i++){
+
+let cant=+document.getElementById(`cant${i}`).value;
+let color=document.getElementById(`color${i}`).value;
+
+if(!cant) continue;
+
+/* CALCULOS CORREGIDOS */
+
+// conversiones reales
+let telaMt = cant / 10;
+let linoMt = cant / 55;
+let pimponMt = cant / 55;
+let viseras = cant;
+let correas = cant;
+let botones = cant;
+let marquillas = cant;
+let banderas = cant;
+let etiquetas = cant;
+let sesgoEMt = cant;
+let sesgoTMt = cant / 4;
+let tiraMt = (cant * 60) / 100;
+
+// costos
+let costoUnitario = Object.values(precios).reduce((a,b)=>a+b,0);
+let inversion = costoUnitario * cant;
+let precioVenta = costoUnitario + 500;
+let ganancia = (precioVenta - costoUnitario) * cant;
+
+totalInv += inversion;
+totalGan += ganancia;
+
+html+=`
+<div class="result">
+
+<h3>Color: ${color}</h3>
+
+<p><b>Materiales:</b></p>
+<ul>
+<li>Tela: ${telaMt.toFixed(2)} mt</li>
+<li>Lino Flex: ${linoMt.toFixed(2)} mt</li>
+<li>Pimpón: ${pimponMt.toFixed(2)} mt</li>
+<li>Viseras: ${viseras} und</li>
+<li>Correas: ${correas} und</li>
+<li>Botones: ${botones} und</li>
+<li>Marquillas: ${marquillas} und</li>
+<li>Banderas: ${banderas} und</li>
+<li>Etiquetas: ${etiquetas} und</li>
+<li>Sesgo estampado: ${sesgoEMt} mt</li>
+<li>Sesgo trasero: ${sesgoTMt.toFixed(2)} mt</li>
+<li>Tira: ${tiraMt.toFixed(2)} mt</li>
+</ul>
+
+<p>Inversión: $${inversion.toFixed(0)}</p>
+<p>Precio unitario: $${costoUnitario.toFixed(0)}</p>
+<p>Precio de venta: $${precioVenta.toFixed(0)}</p>
+<p>Ganancia: $${ganancia.toFixed(0)}</p>
+
+</div>
+`;
+}
+
+html+=`
+<div class="result">
+<h2>Resultado Final</h2>
+<p>Inversión total: $${totalInv.toFixed(0)}</p>
+<p>Ganancia total: $${totalGan.toFixed(0)}</p>
+</div>
+`;
+
+document.getElementById('resultado').innerHTML=html;
+
+}
+
 </script>
+
+</body>
+</html>
