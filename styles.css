@@ -1,0 +1,95 @@
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:#e2e8f0;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+h1{text-align:center;}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.4);
+}
+
+.row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+input{
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:#334155;
+    color:white;
+    width:100%;
+    font-size:16px;
+}
+
+.material_price{
+    width:86%;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:12px;
+}
+
+.material-item{
+    background:#020617;
+    padding:10px;
+    border-radius:10px;
+}
+
+.material-item label{
+    font-size:0.9em;
+    font-weight:600;
+    color:#cbd5e1;
+}
+
+button{
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.add{
+    background:#22c55e;
+    color:white;
+    width:100%;
+    margin:20px 0;
+}
+
+.calc{background:#f59e0b;color:white;width:100%;margin-top:15px;}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.copy{background:#3b82f6;color:white;width:100%;}
+.img{background:#a855f7;color:white;width:100%;}
+
+button:hover{transform:scale(1.05);}
+
+.result{
+    background:#020617;
+    padding:15px;
+    border-radius:10px;
+    margin-top:10px;
+}
