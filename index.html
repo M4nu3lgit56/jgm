@@ -8,6 +8,7 @@
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="script.js" defer></script>
 <link rel="stylesheet" href="styles.css">
+<link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
 </head>
 
 <body>
@@ -16,29 +17,52 @@
 
 <h1>Calculadora Profesional de Gorras</h1>
 
-<div id="gorras"></div>
-<button class="add" onclick="agregar()">+ Agregar otro color</button>
-
-<div class="card">
-<h3>Precios por material</h3>
-<div class="grid">
-
-<div class="material-item"><label>Tela (por gorra)</label><input class="material_price" id="tela" value="934" type="number"></div>
-<div class="material-item"><label>Lino Flex</label><input class="material_price" id="lino" value="450" type="number"></div>
-<div class="material-item"><label>Pimpón</label><input class="material_price" id="pimpon" value="412.5" type="number"></div>
-<div class="material-item"><label>Visera</label><input class="material_price" id="visera" value="480" type="number"></div>
-<div class="material-item"><label>Correa</label><input class="material_price" id="correa" value="180" type="number"></div>
-<div class="material-item"><label>Botón</label><input class="material_price" id="boton" value="65" type="number"></div>
-<div class="material-item"><label>Marquilla</label><input class="material_price" id="marquilla" value="160" type="number"></div>
-<div class="material-item"><label>Bandera</label><input class="material_price" id="bandera" value="70" type="number"></div>
-<div class="material-item"><label>Etiqueta</label><input class="material_price" id="etiqueta" value="70" type="number"></div>
-<div class="material-item"><label>Sesgo estampado (mt)</label><input class="material_price" id="sesgoE" value="270" type="number"></div>
-<div class="material-item"><label>Sesgo trasero</label><input class="material_price" id="sesgoT" value="31" type="number"></div>
-<div class="material-item"><label>Tira</label><input class="material_price" id="tira" value="168" type="number"></div>
-<div class="material-item"><label>Precio de venta</label><input class="material_price" id="precioVenta" value="500" type="number"></div>
-
+<div class="card accordion-header" onclick="toggleAccordion()">
+  <h3>⚙️ Configuración de materiales</h3>
+  <span class="accordion-icon">▼</span>
 </div>
+
+<div class="accordion-content" id="configAccordion">
+  <div class="card">
+    <h4>Tipo de gorra</h4>
+    <div class="row">
+      <label class="switch-label">
+        <input type="checkbox" id="gorraMAlla" onchange="manejarMalla()">
+        <span class="slider round"></span>
+        Gorra de malla
+      </label>
+      <p class="info-text">Si está activado, usa maya en lugar de tela</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Precios y cantidades de materiales</h4>
+    <div id="materialesConfig"></div>
+    <button class="add-material" onclick="agregarMaterialPersonalizado()">+ Agregar material personalizado</button>
+  </div>
 </div>
+
+<div id="gorras">
+    <div class="card" style="
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    ">
+        <div>
+            <label style="display: block; margin-bottom: 10px;"><b>Cantidad total de gorras</b></label>
+            <input id="cantidadGorras" type="number" placeholder="Cantidad" style="max-width: 150px;">
+            <p class="info-text" style="margin-top: 5px;">Se desactiva cuando especificas colores individuales con cantidades</p>
+        </div>
+    </div>
+
+    <div id="coloresGorra" class="card">
+        <h3>Colores de las partes</h3>
+        <div id="partesColores"></div>
+    </div>
+</div>
+
+<button class="add" onclick="agregarOtroColor()">+ Agregar otro color</button>
 
 <button class="calc" onclick="calcular()">Calcular</button>
 
