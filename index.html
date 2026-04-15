@@ -4,70 +4,159 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora de Gorras Pro</title>
-
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="script.js" defer></script>
 <link rel="stylesheet" href="styles.css">
 <link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
 </head>
-
 <body>
 
 <div class="container">
+  <header class="hero">
+    <div class="hero-topbar">
+      <div>
+        <p class="eyebrow">Costeo de produccion</p>
+        <h1>Calculadora Profesional de Gorras</h1>
+        <p class="hero-text">Pensada para talleres y fabricas grandes que necesitan calcular materiales, costos unitarios, utilidad y margen con mas criterio operativo.</p>
+      </div>
+      <div class="hero-controls">
+        <button type="button" class="secondary-btn" id="toggleTheme">Modo oscuro</button>
+        <button type="button" class="danger-btn" onclick="reiniciarApp()">Reiniciar</button>
+      </div>
+    </div>
+  </header>
 
-<h1>Calculadora Profesional de Gorras</h1>
-
-<div class="card accordion-header" onclick="toggleAccordion()">
-  <h3>⚙️ Configuración de materiales</h3>
-  <span class="accordion-icon">▼</span>
-</div>
-
-<div class="accordion-content" id="configAccordion">
   <div class="card">
-    <h4>Tipo de gorra</h4>
-    <div class="row">
-      <label class="switch-label">
-        <input type="checkbox" id="gorraMAlla" onchange="manejarMalla()">
-        <span class="slider round"></span>
-        Gorra de malla
-      </label>
-      <p class="info-text">Si está activado, usa maya en lugar de tela</p>
+    <h3>Datos del pedido</h3>
+    <div class="order-grid">
+      <div>
+        <label for="cliente">Cliente</label>
+        <input id="cliente" type="text" placeholder="Nombre del cliente o marca">
+      </div>
+      <div>
+        <label for="ordenProduccion">Orden de produccion</label>
+        <input id="ordenProduccion" type="text" placeholder="Ej: OP-2026-0414">
+      </div>
+      <div>
+        <label for="modeloGorra">Modelo de gorra</label>
+        <select id="modeloGorra">
+          <option value="personalizado">Personalizado</option>
+          <option value="trucker">Trucker / malla</option>
+          <option value="seis_paneles">6 paneles clasica</option>
+          <option value="cinco_paneles">5 paneles</option>
+          <option value="plana">Visera plana</option>
+          <option value="curva">Visera curva premium</option>
+        </select>
+      </div>
+      <div>
+        <label for="tiempoEntrega">Entrega estimada</label>
+        <input id="tiempoEntrega" type="text" placeholder="Ej: 12 dias habiles">
+      </div>
+    </div>
+    <p class="info-text">Estos datos se incorporan al resumen para que la calculadora sirva también como soporte comercial y de planeación.</p>
+  </div>
+
+  <div class="card accordion-header" onclick="toggleAccordion()">
+    <h3>Configuracion de materiales y costos</h3>
+    <span class="accordion-icon">▼</span>
+  </div>
+
+  <div class="accordion-content" id="configAccordion">
+    <div class="card">
+      <h4>Tipo de gorra</h4>
+      <div class="row">
+        <label class="switch-label">
+          <input type="checkbox" id="gorraMAlla" onchange="manejarMalla()">
+          <span class="slider round"></span>
+          Gorra de malla
+        </label>
+        <p class="info-text">Si esta activado, el material principal se mostrara como malla en vez de tela.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Precios y cantidades de materiales</h4>
+      <div id="materialesConfig"></div>
+      <button class="add-material" onclick="agregarMaterialPersonalizado()">+ Agregar material personalizado</button>
+    </div>
+
+    <div class="card">
+      <h4>Costos industriales</h4>
+      <div class="cost-grid">
+        <div>
+          <label for="precioVenta">Precio de venta por gorra</label>
+          <input id="precioVenta" type="number" min="0" step="1" value="500" placeholder="Precio de venta">
+        </div>
+        <div>
+          <label for="manoObra">Mano de obra por gorra</label>
+          <input id="manoObra" type="number" min="0" step="1" value="0" placeholder="Costo mano de obra">
+        </div>
+        <div>
+          <label for="costosIndirectos">Indirectos por gorra</label>
+          <input id="costosIndirectos" type="number" min="0" step="1" value="0" placeholder="Servicios, supervision, energia">
+        </div>
+        <div>
+          <label for="porcentajeDesperdicio">Desperdicio (%)</label>
+          <input id="porcentajeDesperdicio" type="number" min="0" step="0.1" value="0" placeholder="Merma">
+        </div>
+        <div>
+          <label for="margenObjetivo">Margen objetivo (%)</label>
+          <input id="margenObjetivo" type="number" min="0" step="0.1" value="30" placeholder="Margen meta">
+        </div>
+      </div>
+      <p class="info-text">Esto permite costear mejor una operacion real, no solo el consumo de insumos.</p>
+    </div>
+
+    <div class="card">
+      <h4>Procesos de produccion por gorra</h4>
+      <div class="cost-grid">
+        <div>
+          <label for="costoCorte">Corte</label>
+          <input id="costoCorte" type="number" min="0" step="1" value="0" placeholder="Costo de corte">
+        </div>
+        <div>
+          <label for="costoBordado">Bordado / estampado</label>
+          <input id="costoBordado" type="number" min="0" step="1" value="0" placeholder="Proceso decorativo">
+        </div>
+        <div>
+          <label for="costoConfeccion">Armado / confeccion</label>
+          <input id="costoConfeccion" type="number" min="0" step="1" value="0" placeholder="Costo de confeccion">
+        </div>
+        <div>
+          <label for="costoEmpaque">Empaque</label>
+          <input id="costoEmpaque" type="number" min="0" step="1" value="0" placeholder="Bolsa, caja, packing">
+        </div>
+      </div>
+      <p class="info-text">Conviene separar procesos cuando una fabrica tiene diferentes células, terceros o estándares por línea.</p>
     </div>
   </div>
 
-  <div class="card">
-    <h4>Precios y cantidades de materiales</h4>
-    <div id="materialesConfig"></div>
-    <button class="add-material" onclick="agregarMaterialPersonalizado()">+ Agregar material personalizado</button>
-  </div>
-</div>
-
-<div id="gorras">
-    <div class="card" style="
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap;
-    ">
-        <div>
-            <label style="display: block; margin-bottom: 10px;"><b>Cantidad total de gorras</b></label>
-            <input id="cantidadGorras" type="number" placeholder="Cantidad" style="max-width: 150px;">
-            <p class="info-text" style="margin-top: 5px;">Se desactiva cuando especificas colores individuales con cantidades</p>
-        </div>
+  <section id="gorras">
+    <div class="card order-card">
+      <div>
+        <label class="section-label" for="cantidadGorras"><b>Cantidad total de gorras</b></label>
+        <input id="cantidadGorras" type="number" min="0" step="1" placeholder="Cantidad total del pedido">
+        <p class="info-text">Si defines colores por referencia, este campo se bloquea para evitar duplicar cantidades.</p>
+      </div>
     </div>
 
     <div id="coloresGorra" class="card">
-        <h3>Colores de las partes</h3>
-        <div id="partesColores"></div>
+      <div class="section-heading">
+        <div>
+          <h3>Referencias y colores de partes</h3>
+          <p class="info-text">Separa cada combinacion de color como si fuera una referencia de produccion.</p>
+        </div>
+      </div>
+      <div id="partesColores"></div>
     </div>
-</div>
+  </section>
 
-<button class="add" onclick="agregarOtroColor()">+ Agregar otro color</button>
+  <button class="add" onclick="agregarOtroColor()">+ Agregar otra referencia</button>
+  <button class="calc" onclick="calcular()">Calcular pedido</button>
+  <button class="secondary-wide" onclick="exportarResumen()">Exportar resumen CSV</button>
 
-<button class="calc" onclick="calcular()">Calcular</button>
-
-<div id="resultado"></div>
-
+  <div id="alertas" aria-live="polite"></div>
+  <div id="resultado"></div>
 </div>
 
 </body>
